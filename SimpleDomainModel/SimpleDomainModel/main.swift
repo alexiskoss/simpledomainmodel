@@ -144,21 +144,25 @@ open class Person {
         }
     }
     set(value) {
-        self._job = value;
+        if(self.age >= 16) {
+            self._job = value;
+        }
     }
   }
   
   fileprivate var _spouse : Person? = nil
   open var spouse : Person? {
     get {
-        if(self.age >= 16) {
+        if(self.age >= 21) {
             return self._spouse;
         } else {
             return nil;
         }
     }
     set(value) {
-        self._spouse = value;
+        if(self.age >= 21) {
+            self._spouse = value;
+        }
     }
   }
   
@@ -180,16 +184,32 @@ open class Family {
   fileprivate var members : [Person] = []
   
   public init(spouse1: Person, spouse2: Person) {
-    if(spouse1.get == nil && spouse2.get == nil) {
-        spouse1.set(spouse2);
-        spouse2.set(spouse1);
+    if(spouse1._spouse == nil && spouse2._spouse == nil) {
+        spouse1._spouse = spouse2;
+        spouse2._spouse = spouse1;
+        self.members.append(spouse1);
+        self.members.append(spouse2);
     }
   }
   
   open func haveChild(_ child: Person) -> Bool {
+    for member in self.members {
+        if(member.age >= 21 && member.spouse != nil) {
+            self.members.append(child);
+            return true;
+        }
+    }
+    return false;
   }
   
   open func householdIncome() -> Int {
+    var totalIncome: Int = 0;
+    for member in self.members {
+        if (member.job != nil) {
+            totalIncome += (member.job?.calculateIncome(2000))!;
+        }
+    }
+    return totalIncome;
   }
 }
 
