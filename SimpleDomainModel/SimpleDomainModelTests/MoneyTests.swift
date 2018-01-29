@@ -59,7 +59,7 @@ class MoneyTests: XCTestCase {
   func testCANtoUSD() {
     let usd = fifteenCAN.convert("USD")
     XCTAssert(usd.currency == "USD")
-    XCTAssert(usd.amount == 12)
+    XCTAssert(usd.amount == 12) 
   }
   
   func testUSDtoEURtoUSD() {

@@ -34,7 +34,7 @@ public struct Money {
             return Money(amount: (self.amount * 2), currency: "USD");
         } else if(self.currency == "EUR") {
             return Money(amount: (self.amount * 2/3), currency: "USD");
-        } else if(self.currency == "CAD") {
+        } else if(self.currency == "CAN") {
             return Money(amount: (self.amount * 4/5), currency: "USD");
         } else {
             return self;
@@ -44,7 +44,7 @@ public struct Money {
             return Money(amount: (self.amount / 2), currency: "GBP");
         } else if(self.currency == "EUR") {
             return Money(amount: (self.amount / 3), currency: "GBP");
-        } else if(self.currency == "CAD") {
+        } else if(self.currency == "CAN") {
             return Money(amount: (self.amount * 2/5), currency: "GBP");
         } else {
             return self;
@@ -54,18 +54,18 @@ public struct Money {
             return Money(amount: (self.amount * 3/2), currency: "EUR");
         } else if(self.currency == "GBP") {
             return Money(amount: (self.amount * 3), currency: "EUR");
-        } else if(self.currency == "CAD") {
+        } else if(self.currency == "CAN") {
             return Money(amount: (self.amount * 6/5), currency: "EUR");
         } else {
             return self;
         }
-    case "CAD":
+    case "CAN":
         if(self.currency == "USD") {
-            return Money(amount: (self.amount * 5/4), currency: "CAD");
+            return Money(amount: (self.amount * 5/4), currency: "CAN");
         } else if(self.currency == "GBP") {
-            return Money(amount: (self.amount * 5/2), currency: "CAD");
+            return Money(amount: (self.amount * 5/2), currency: "CAN");
         } else if(self.currency == "EUR") {
-            return Money(amount: (self.amount * 5/6), currency: "CAD");
+            return Money(amount: (self.amount * 5/6), currency: "CAN");
         } else {
             return self;
         }
@@ -110,18 +110,18 @@ open class Job {
   open func calculateIncome(_ hours: Int) -> Int {
     switch self.type {
     case .Hourly(let total):
-        return Int(total) * hours;
+        return Int(total * Double(hours));
     case .Salary(let total):
-        return total;
+        return Int(total);
     }
   }
   
   open func raise(_ amt : Double) {
     switch self.type {
     case .Hourly(let total):
-        self.type = JobType.Hourly(total + amt);
+        self.type = JobType.Hourly(Double(total) + amt);
     case .Salary(let total):
-        self.type = JobType.Salary(total + Int(amt));
+        self.type = JobType.Salary(Int(Double(total) + amt));
     }
   }
 }
@@ -137,15 +137,13 @@ open class Person {
   fileprivate var _job : Job? = nil
   open var job : Job? {
     get {
-        if(self.age >= 16) {
-            return self._job;
-        } else {
-            return nil;
-        }
+        return self._job;
     }
     set(value) {
         if(self.age >= 16) {
             self._job = value;
+        } else {
+            self._job = nil;
         }
     }
   }
@@ -153,15 +151,13 @@ open class Person {
   fileprivate var _spouse : Person? = nil
   open var spouse : Person? {
     get {
-        if(self.age >= 21) {
-            return self._spouse;
-        } else {
-            return nil;
-        }
+        return self._spouse;
     }
     set(value) {
         if(self.age >= 21) {
             self._spouse = value;
+        } else {
+            self._spouse = nil;
         }
     }
   }
@@ -173,7 +169,7 @@ open class Person {
   }
   
   open func toString() -> String {
-    return "[Person: firstName: \(self.firstName) lastName: \(self.lastName) age: \(self.age) job: \(String(describing: self.job)) spouse: \(String(describing: self.spouse))]"
+    return "[Person: firstName:\(self.firstName) lastName:\(self.lastName) age:\(self.age) job:\(String(describing: self._job)) spouse:\(String(describing: self._spouse))]"
   }
 }
 
