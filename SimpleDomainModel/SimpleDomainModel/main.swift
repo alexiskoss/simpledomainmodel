@@ -75,18 +75,10 @@ public struct Money {
   }
   
   public func add(_ to: Money) -> Money {
-    if(self.currency == to.currency) {
-        return Money(amount: (self.amount + to.amount), currency: to.currency);
-    } else {
-        return Money(amount: (self.convert(to.currency).amount + to.amount), currency: to.currency);
-    }
+    return Money(amount: (self.convert(to.currency).amount + to.amount), currency: to.currency);
   }
   public func subtract(_ from: Money) -> Money {
-    if(self.currency == from.currency) {
-        return Money(amount: (from.amount - self.amount), currency: from.currency);
-    } else {
-        return Money(amount: from.amount - (self.convert(from.currency).amount), currency: from.currency)
-    }
+    return Money(amount: from.amount - (self.convert(from.currency).amount), currency: from.currency)
   }
 }
 
@@ -208,8 +200,3 @@ open class Family {
     return totalIncome;
   }
 }
-
-
-
-
-
